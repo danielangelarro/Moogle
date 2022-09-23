@@ -1,0 +1,133 @@
+.results {
+    text-align: left;
+}
+
+.item .title {
+    font-size: large;
+    font-weight: bold;
+}
+
+.container{
+    background-color: rgba(255, 255, 255, 0.3);
+
+    backdrop-filter: blur(20px);
+    border: solid 1px rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    width: 80%;
+    margin: 0 auto;
+
+    box-shadow: 0 10px 20px  5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    
+}
+
+.sidebar{
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.search-card{
+    color: white;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.logo{
+    height: 70px;
+    box-shadow: 0 10px 20px  5px rgba(0, 0, 0, 0.05);
+}
+
+.input{
+    backdrop-filter: blur(5px);
+    text-align: center;
+    padding: 2px;
+    display: flex;
+    height: 40px;
+}
+
+main{
+    padding: 20px;
+}
+
+.widget{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 10px 20px 5px rgba(0, 0, 0, 0.3);
+}
+
+main .header{
+    align-items: center;
+}
+
+main .header span{
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 18px;
+    margin: 10px 0;
+    font-weight: bolder;
+    display: block;
+}
+
+.card{
+    border-radius: 5px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 10px 0 20px 0;
+    overflow: hidden;
+    border: solid 1px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover{
+    background-color: rgba(200, 200, 200, 0.8);
+    box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.5);
+}
+
+.card .content{
+    display: flex;
+    align-items: left;
+    background: white;
+    padding: 20px;
+}
+
+.card .left{
+    padding-right: 15px;
+}
+
+.card .right{
+    width: 100%;
+}
+
+.card .right .result{
+    font-size: 22px;
+}
+
+.card .right .snippet{
+    padding: 5px 0;
+    font-size: 14px;
+    color: #889;
+}
+
+.btn{
+    background: #0084ff;
+    border: none;
+    font-weight: bolder;
+    color:white;
+    /* padding: 15px 20px; */
+    border-radius: 5px;
+}
+
+.btn:hover{
+    background-color: #118cff;
+    box-shadow: 0 5px 10px 2px rgba(10, 137, 255, 0.5);
+}
+
+.btn-radius{
+    border-radius: 5px;
+}
+
+.snippet {
+    text-align: justify;
+}

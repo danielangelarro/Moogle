@@ -1,0 +1,179 @@
+﻿@page "/"
+
+<PageTitle>Moogle!</PageTitle>
+
+<!-- Sección principal del buscador. -->
+
+@if (!ReadDocument) {
+<div class="container">
+    <div class="sidebar">
+        <div class="search-card">
+            <img src="../img/logo.png" class="logo">
+
+            <div class="input">
+                <input class="me-2 form-control" @bind="query" @onkeyup="EventHandler" type="search" placeholder="Search" aria-label="Search">
+
+                <button type="default" class="btn btn-primary" @onclick="RunQuery">Buscar</button>
+            </div>
+            
+            @if (!string.IsNullOrEmpty(result.Suggestion)) {
+                <div class="suggestion">
+                    <p>¿Quisiste decir <strong><a href="#" @onclick="Redirect">@result.Suggestion</a></strong>?</p>
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <main>
+        <div class="header">
+            @if (result.Count > 0) {
+                <div class="suggestion">
+                    <span>Se han encontrado <b><strong>@result.Count</strong> resultados.</b></span>
+                </div>
+
+                @foreach (var item in result.Page(pagination.Now)) {
+                <div class="card" @onclick="@(() => ViewDocument(item.Link))">
+                    <div class="content">
+                        <div class="left">
+                            <img src="../img/logo.svg" class="widget" width="50" alt="">
+                        </div>
+
+                        <div class="right">
+                            <div class="result">@item.Title</div>
+                            <div class="snippet">... @((MarkupString) item.Snippet) ...</div>
+                            
+                        </div>
+                    </div>
+                </div>
+                }
+            }
+            @if (result.Count == 0 && SearchSuccess) {
+                <section style="color: white">
+                    <h2>No se han encontrado resultados.</h2>
+                    <p>Pruebe haciendo una búsqueda más específica.</p>
+                    <img src="../img/not_result.png" width="80%">
+                </section>
+            }
+        </div>
+    </main>
+
+    @if (pagination.Count > 1) {
+    <div class="bd-example-snippet bd-code-snippet w-auto">
+        <div class="bd-example">
+            <nav aria-label="Standard pagination example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous" @onclick="@(() => pagination.SetPage("init"))">
+                            <span aria-hidden="true"> ⏪ </span>
+                        </a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous" @onclick="@(() => pagination.SetPage("prev"))">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    
+                    @for (int p = pagination.First; p <= pagination.End; p++) {
+                        int numberPage = p;
+
+                        <li class="page-item">
+                            <a class="page-link" href="#" @onclick="@(() => @pagination.SetPage( numberPage.ToString() ))">
+                                @p
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next" @onclick="@(() => @pagination.SetPage("next"))">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next" @onclick="@(() => @pagination.SetPage("end"))">
+                            <span aria-hidden="true"> ⏩ </span>
+                        </a>
+                    </li>
+                
+                </ul>
+            </nav>
+        </div>
+    </div>
+    }
+</div>
+}
+
+<!-- Sección encargada de mostrar el contenido deal documento seleccionado. -->
+
+@if (ReadDocument) {
+<div class="container">
+    
+    <div class="sidebar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary mt-5">
+            <div class="container-fluid">
+
+                <img src="../img/logo.svg" width="38" height="30" class="d-inline-block align-top" alt="Moogle" loading="lazy">
+
+                <div class="collapse navbar-collapse d-flex" id="navbarSupportedContent2">
+                    <img src="../img/logo.png" height="30" class="d-inline-block align-top me-auto" alt="Moogle" loading="lazy">
+                    <button class="btn-outline-danger btn-radius" @onclick="@(() => ViewDocument(""))">Salir</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <main>
+        <div class="header">
+            <div class="card">
+                <div class="content">
+                    <div class="right">
+                        <div class="result">@Document.A</div>
+                        <div class="snippet" style="white-space: pre-line"> @Document.B </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+}
+
+@code {
+    private Pair<string, string> Document = new Pair<string, string>();
+    private SearchResult result = new SearchResult();
+    private Pagination pagination = new Pagination();
+    private bool ReadDocument = false, SearchSuccess = false;
+    private string query = "";
+
+
+    private void ViewDocument(string title){
+        if (!ReadDocument)
+        {
+            Document = result.GetItemById(title);
+            ReadDocument = true;
+        }
+        else{
+            ReadDocument = false;
+        }
+    }
+
+    private void Redirect() {
+        query = result.Suggestion;
+        RunQuery();
+    }
+
+    private void RunQuery() {
+        SearchSuccess = true;
+        result = Moogle.Query(query);
+        pagination.Load(result.Count);
+    }
+
+    private void EventHandler(KeyboardEventArgs args)
+    {
+        if(args.Key == "Enter")
+        {
+            RunQuery();
+        }
+    }
+}
